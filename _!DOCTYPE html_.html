@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organización SILACORP - Cursos de Brigadas de Emergencia</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* General body styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Light grey background */
+            color: #333; /* Dark grey text */
+            line-height: 1.6;
+        }
+
+        /* Container for centering content */
+        .container {
+            width: 85%; /* Responsive width */
+            margin: auto;
+            overflow: hidden; /* Clears floats */
+            padding: 20px;
+        }
+
+        /* Header styles */
+        header {
+            background: #DC143C; /* Main red color */
+            color: #fff; /* White text */
+            padding-top: 30px;
+            min-height: 120px;
+            border-bottom: #B22222 3px solid; /* Darker red border */
+            text-align: center;
+        }
+
+        header img.logo {
+            width: 150px; /* Adjust as needed */
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3em; /* Large and striking typography */
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Navigation styles */
+        nav ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+            background: #B22222; /* Darker red for nav background */
+            margin-top: 10px;
+        }
+
+        nav ul li {
+            display: inline; /* Horizontal menu */
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: inline-block;
+            font-size: 1.2em;
+        }
+
+        nav ul li a:hover {
+            background: #DC143C; /* Main red on hover */
+        }
+
+        /* Section styles */
+        .section {
+            background: #fff; /* White background for content sections */
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Subtle shadow */
+        }
+
+        .section h2 {
+            color: #DC143C; /* Main red for section titles */
+            font-size: 2.5em; /* Large typography */
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #f4f4f4; /* Light separator line */
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #B22222; /* Darker red for subheadings */
+            font-size: 1.8em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .section p, .section ul {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .section ul {
+            list-style: disc; /* Standard bullet points */
+            padding-left: 20px;
+        }
+
+        /* Form group styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="tel"],
+        .form-group input[type="email"],
+        .form-group input[type="file"],
+        .form-group select,
+        .form-group textarea {
+            width: calc(100% - 22px); /* Full width minus padding and border */
+            padding: 12px;
+            border: 1px solid #ddd; /* Light grey border */
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        .form-group textarea {
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 100px;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            background: #DC143C; /* Main red */
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            text-decoration: none;
+            margin-right: 10px;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        .btn:hover {
+            background: #B22222; /* Darker red on hover */
+        }
+
+        .btn-secondary {
+            background: #555; /* Grey for secondary button */
+        }
+        .btn-secondary:hover {
+            background: #333; /* Darker grey on hover */
+        }
+
+        /* Success message style */
+        .success-message {
+            background: #d4edda; /* Light green background */
+            color: #155724; /* Dark green text */
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.1em;
+            display: none; /* Hidden by default */
+        }
+
+        /* Footer styles */
+        footer {
+            background: #333; /* Dark grey background */
+            color: #fff;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 30px;
+        }
+
+        .social-icons a {
+            color: #fff;
+            margin: 0 15px;
+            font-size: 2em; /* Large icons */
+            text-decoration: none;
+        }
+        .social-icons a:hover {
+            color: #DC143C; /* Main red on hover */
+        }
+
+        /* WhatsApp floating button */
+        .whatsapp-button {
+            position: fixed; /* Stays in place on scroll */
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366; /* WhatsApp green */
+            color: white;
+            padding: 15px;
+            border-radius: 50%; /* Circular button */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            font-size: 2em;
+            z-index: 1000; /* Ensures it's on top */
+            text-decoration: none;
+        }
+        .whatsapp-button:hover {
+            background-color: #1DAA51; /* Darker WhatsApp green */
+        }
+
+        /* Centering form buttons */
+        .form-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Styles for the PDF receipt content (initially hidden) */
+        #receiptContent {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin: 20px;
+            display: none; /* Hidden until PDF generation */
+            background-color: #fff;
+        }
+        #receiptContent h3 {
+            color: #DC143C;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        #receiptContent p {
+            margin: 8px 0;
+            font-size: 1em;
+        }
+        #receiptContent strong {
+            color: #333;
+        }
+        .receipt-logo {
+            display: block;
+            margin: 0 auto 15px auto;
+            max-width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="https://placehold.co/150x80/DC143C/FFFFFF?text=SILACORP" alt="Logo SILACORP" class="logo" id="receiptLogoImg" onerror="this.onerror=null;this.src='https://placehold.co/150x80/CCCCCC/000000?text=Logo+Error';">
+            <h1>Organización SILACORP</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#quienes-somos"><i class="fas fa-users"></i> Quiénes Somos</a></li>
+                <li><a href="#cursos"><i class="fas fa-graduation-cap"></i> Cursos</a></li>
+                <li><a href="#inscripcion"><i class="fas fa-edit"></i> Inscripción</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="quienes-somos" class="section">
+            <h2><i class="fas fa-building"></i> Quiénes Somos - Organización SILACORP</h2>
+            <p>Aquí va una breve descripción de Organización SILACORP, su trayectoria y el compromiso con la seguridad y capacitación.</p>
+
+            <h3><i class="fas fa-bullseye"></i> Misión</h3>
+            <p>Nuestra misión es proveer capacitación de la más alta calidad en materia de seguridad y respuesta a emergencias, empoderando a individuos y organizaciones para crear entornos más seguros.</p>
+
+            <h3><i class="fas fa-eye"></i> Visión</h3>
+            <p>Ser la organización líder y referente a nivel nacional en la formación de brigadas de emergencia y profesionales de la seguridad, reconocida por nuestra excelencia, innovación y compromiso con la vida.</p>
+
+            <h3><i class="fas fa-heart"></i> Valores</h3>
+            <ul>
+                <li><strong>Compromiso:</strong> Con la seguridad y el bienestar de nuestros clientes.</li>
+                <li><strong>Excelencia:</strong> En cada curso y servicio que ofrecemos.</li>
+                <li><strong>Integridad:</strong> Actuando con honestidad y transparencia.</li>
+                <li><strong>Innovación:</strong> Buscando constantemente mejorar nuestros métodos de enseñanza.</li>
+                <li><strong>Responsabilidad:</strong> Fomentando una cultura de prevención.</li>
+            </ul>
+        </section>
+
+        <section id="cursos" class="section">
+            <h2><i class="fas fa-chalkboard-teacher"></i> Nuestros Cursos</h2>
+            <p>Ofrecemos una variedad de cursos diseñados para preparar a tu personal ante cualquier eventualidad. Nuestro principal enfoque es la formación integral en brigadas de emergencia.</p>
+            <h3><i class="fas fa-fire-extinguisher"></i> Objetivo General del Curso de Brigadas de Emergencia</h3>
+            <p>Capacitar al personal para que adquiera los conocimientos, habilidades y destrezas necesarias para prevenir, controlar y reaccionar eficazmente ante situaciones de emergencia, minimizando riesgos y salvaguardando la integridad de las personas y los bienes de la organización. Se busca formar brigadistas competentes en primeros auxilios, combate de incendios, evacuación y comunicación en crisis.</p>
+            <h4>Otros Cursos Disponibles:</h4>
+            <ul>
+                <li>Primeros Auxilios Básicos y Avanzados</li>
+                <li>Uso y Manejo de Extintores (Combate Contra Incendios Nivel Básico)</li>
+                <li>Evacuación de Inmuebles</li>
+                <li>Búsqueda y Rescate</li>
+                <li>Comunicación en Emergencias</li>
+            </ul>
+        </section>
+
+        <section id="inscripcion" class="section">
+            <h2><i class="fas fa-clipboard-list"></i> Formulario de Inscripción</h2>
+            <form id="inscriptionForm">
+                <div class="form-group">
+                    <label for="nombre"><i class="fas fa-user"></i> Nombre Completo:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="fechaNacimiento"><i class="fas fa-calendar-alt"></i> Fecha de Nacimiento:</label>
+                    <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+                </div>
+                <div class="form-group">
+                    <label for="curso"><i class="fas fa-book-open"></i> Selecciona el curso al que te inscribes:</label>
+                    <select id="curso" name="curso" required>
+                        <option value="">-- Selecciona un curso --</option>
+                        <option value="Brigada de Emergencias">Brigada de Emergencias</option>
+                        <option value="Primeros Auxilios">Primeros Auxilios</option>
+                        <option value="Combate Contra Incendios">Combate Contra Incendios</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modalidad"><i class="fas fa-laptop-house"></i> Modalidad del curso:</label>
+                    <select id="modalidad" name="modalidad" required>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Virtual">Virtual</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="telefono"><i class="fas fa-phone"></i> Teléfono (10 dígitos):</label>
+                    <input type="tel" id="telefono" name="telefono" maxlength="10" pattern="\d{10}" title="Debe contener 10 dígitos numéricos" required>
+                </div>
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> E-mail:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="ciudad"><i class="fas fa-city"></i> Ciudad:</label>
+                    <input type="text" id="ciudad" name="ciudad" required>
+                </div>
+                <div class="form-group">
+                    <label for="estado"><i class="fas fa-map-marker-alt"></i> Estado:</label>
+                    <select id="estado" name="estado" required>
+                        <option value="">-- Selecciona un estado --</option>
+                        <option value="Aguascalientes">Aguascalientes</option>
+                        <option value="Baja California">Baja California</option>
+                        <option value="Baja California Sur">Baja California Sur</option>
+                        <option value="Campeche">Campeche</option>
+                        <option value="Chiapas">Chiapas</option>
+                        <option value="Chihuahua">Chihuahua</option>
+                        <option value="Coahuila">Coahuila</option>
+                        <option value="Colima">Colima</option>
+                        <option value="Ciudad de México">Ciudad de México</option>
+                        <option value="Durango">Durango</option>
+                        <option value="Guanajuato">Guanajuato</option>
+                        <option value="Guerrero">Guerrero</option>
+                        <option value="Hidalgo">Hidalgo</option>
+                        <option value="Jalisco">Jalisco</option>
+                        <option value="México">México</option>
+                        <option value="Michoacán">Michoacán</option>
+                        <option value="Morelos">Morelos</option>
+                        <option value="Nayarit">Nayarit</option>
+                        <option value="Nuevo León">Nuevo León</option>
+                        <option value="Oaxaca">Oaxaca</option>
+                        <option value="Puebla">Puebla</option>
+                        <option value="Querétaro">Querétaro</option>
+                        <option value="Quintana Roo">Quintana Roo</option>
+                        <option value="San Luis Potosí">San Luis Potosí</option>
+                        <option value="Sinaloa">Sinaloa</option>
+                        <option value="Sonora">Sonora</option>
+                        <option value="Tabasco">Tabasco</option>
+                        <option value="Tamaulipas">Tamaulipas</option>
+                        <option value="Tlaxcala">Tlaxcala</option>
+                        <option value="Veracruz">Veracruz</option>
+                        <option value="Yucatán">Yucatán</option>
+                        <option value="Zacatecas">Zacatecas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comentarios"><i class="fas fa-comment-dots"></i> Comentarios Adicionales:</label>
+                    <textarea id="comentarios" name="comentarios" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="cvFile"><i class="fas fa-file-alt"></i> Adjuntar CV (PDF o DOCX):</label>
+                    <input type="file" id="cvFile" name="cvFile" accept=".pdf,.doc,.docx" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Generar Inscripción</button>
+                    <button type="button" id="exportPdfBtn" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Exportar Recibo a PDF</button>
+                </div>
+            </form>
+            <div id="successMessage" class="success-message">
+                <i class="fas fa-check-circle"></i> ¡Se ha inscrito correctamente!
+            </div>
+        </section>
+
+        <div id="receiptContent">
+             <img src="https://placehold.co/120x60/DC143C/FFFFFF?text=Logo" alt="Logo SILACORP" class="receipt-logo" onerror="this.onerror=null;this.src='https://placehold.co/120x60/CCCCCC/000000?text=Error';">
+            <h3><i class="fas fa-receipt"></i> Recibo de Inscripción - SILACORP</h3>
+            <p><strong>Nombre Completo:</strong> <span id="receiptNombre"></span></p>
+            <p><strong>Fecha de Nacimiento:</strong> <span id="receiptFechaNacimiento"></span></p>
+            <p><strong>Curso Inscrito:</strong> <span id="receiptCurso"></span></p>
+            <p><strong>Modalidad:</strong> <span id="receiptModalidad"></span></p>
+            <p><strong>Teléfono:</strong> <span id="receiptTelefono"></span></p>
+            <p><strong>E-mail:</strong> <span id="receiptEmail"></span></p>
+            <p><strong>Ciudad:</strong> <span id="receiptCiudad"></span></p>
+            <p><strong>Estado:</strong> <span id="receiptEstado"></span></p>
+            <p><strong>Comentarios:</strong> <span id="receiptComentarios"></span></p>
+            <p><strong>CV Adjunto:</strong> <span id="receiptCvFile"></span></p>
+            <hr>
+            <p style="text-align:center; font-size:0.9em;">Organización SILACORP - ¡Gracias por su preferencia!</p>
+            <p style="text-align:center; font-size:0.8em;">Fecha de Emisión: <span id="receiptFechaEmision"></span></p>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Síguenos en nuestras redes sociales:</p>
+            <div class="social-icons">
+                <a href="https://facebook.com/tu_pagina_fb" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com/tu_pagina_insta" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://tiktok.com/@tu_pagina_tiktok" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://linkedin.com/company/tu_pagina_linkedin" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <p>&copy; <span id="currentYear"></span> Organización SILACORP. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/521XXXXXXXXXX?text=Hola,%20estoy%20interesado%20en%20sus%20cursos." class="whatsapp-button" target="_blank" title="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Get form and message elements
+        const form = document.getElementById('inscriptionForm');
+        const successMessage = document.getElementById('successMessage');
+        const telefonoInput = document.getElementById('telefono');
+        const cvFileInput = document.getElementById('cvFile'); // Get CV file input
+        const exportPdfBtn = document.getElementById('exportPdfBtn');
+
+        // Validate phone input to allow only numbers and max 10 digits
+        telefonoInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            if (value.length > 10) {
+                value = value.slice(0, 10); // Limit to 10 digits
+            }
+            e.target.value = value;
+        });
+
+        // Handle form submission
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent actual form submission
+
+            // Validate phone number length
+            if (telefonoInput.value.length !== 10) {
+                const alertDiv = document.createElement('div');
+                alertDiv.style.position = 'fixed';
+                alertDiv.style.top = '20px';
+                alertDiv.style.left = '50%';
+                alertDiv.style.transform = 'translateX(-50%)';
+                alertDiv.style.padding = '15px';
+                alertDiv.style.backgroundColor = '#f8d7da';
+                alertDiv.style.color = '#721c24';
+                alertDiv.style.border = '1px solid #f5c6cb';
+                alertDiv.style.borderRadius = '5px';
+                alertDiv.style.zIndex = '2000';
+                alertDiv.innerHTML = 'El número de teléfono debe contener exactamente 10 dígitos. <button onclick="this.parentElement.remove()" style="margin-left: 15px; padding: 5px 10px; cursor:pointer;">OK</button>';
+                document.body.appendChild(alertDiv);
+                telefonoInput.focus();
+                return;
+            }
+
+            // Log form data (in a real app, you'd send this to a server)
+            // For CV, we log the file name. Actual upload needs server-side code.
+            const cvFile = cvFileInput.files[0];
+            console.log('Datos del formulario:', {
+                nombre: document.getElementById('nombre').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                curso: document.getElementById('curso').value,
+                modalidad: document.getElementById('modalidad').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value,
+                ciudad: document.getElementById('ciudad').value,
+                estado: document.getElementById('estado').value,
+                comentarios: document.getElementById('comentarios').value,
+                cvFileName: cvFile ? cvFile.name : 'No CV adjuntado' // Log CV file name
+            });
+
+            successMessage.style.display = 'block'; // Show success message
+            form.reset(); // Clear the form
+
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 5000);
+        });
+
+        // Handle PDF export
+        exportPdfBtn.addEventListener('click', async function() {
+            const { jsPDF } = window.jspdf; // Destructure jsPDF from the global jspdf object
+            const doc = new jsPDF();
+
+            // Check if form has data for the receipt
+            const nombreValue = document.getElementById('nombre').value;
+            // If form was reset, these values will be empty.
+            // For PDF export to work after form reset, we would need to temporarily store the last submitted data.
+            // This example assumes data is present or re-entered for PDF generation if the form was cleared.
+            if (!nombreValue && !document.getElementById('receiptNombre').textContent) {
+                 const alertDiv = document.createElement('div');
+                alertDiv.style.position = 'fixed';
+                alertDiv.style.top = '20px';
+                alertDiv.style.left = '50%';
+                alertDiv.style.transform = 'translateX(-50%)';
+                alertDiv.style.padding = '15px';
+                alertDiv.style.backgroundColor = '#fff3cd';
+                alertDiv.style.color = '#856404';
+                alertDiv.style.border = '1px solid #ffeeba';
+                alertDiv.style.borderRadius = '5px';
+                alertDiv.style.zIndex = '2000';
+                alertDiv.innerHTML = 'Por favor, complete los datos del formulario antes de generar el recibo o asegúrese de haber llenado al menos el nombre. <button onclick="this.parentElement.remove()" style="margin-left: 15px; padding: 5px 10px; cursor:pointer;">OK</button>';
+                document.body.appendChild(alertDiv);
+                return;
+            }
+
+            // Populate the hidden receipt content
+            // Use current form values if available, otherwise use existing receipt values (if any)
+            document.getElementById('receiptNombre').textContent = document.getElementById('nombre').value || document.getElementById('receiptNombre').textContent || 'N/A';
+            document.getElementById('receiptFechaNacimiento').textContent = document.getElementById('fechaNacimiento').value || document.getElementById('receiptFechaNacimiento').textContent || 'N/A';
+            document.getElementById('receiptCurso').textContent = document.getElementById('curso').value || document.getElementById('receiptCurso').textContent || 'N/A';
+            document.getElementById('receiptModalidad').textContent = document.getElementById('modalidad').value || document.getElementById('receiptModalidad').textContent || 'N/A';
+            document.getElementById('receiptTelefono').textContent = document.getElementById('telefono').value || document.getElementById('receiptTelefono').textContent || 'N/A';
+            document.getElementById('receiptEmail').textContent = document.getElementById('email').value || document.getElementById('receiptEmail').textContent || 'N/A';
+            document.getElementById('receiptCiudad').textContent = document.getElementById('ciudad').value || document.getElementById('receiptCiudad').textContent || 'N/A';
+            document.getElementById('receiptEstado').textContent = document.getElementById('estado').value || document.getElementById('receiptEstado').textContent || 'N/A';
+            document.getElementById('receiptComentarios').textContent = document.getElementById('comentarios').value || document.getElementById('receiptComentarios').textContent || 'Ninguno';
+            const cvFileForReceipt = document.getElementById('cvFile').files[0];
+            document.getElementById('receiptCvFile').textContent = cvFileForReceipt ? cvFileForReceipt.name : (document.getElementById('receiptCvFile').textContent || 'No adjuntado');
+            document.getElementById('receiptFechaEmision').textContent = new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+
+
+            const receiptElement = document.getElementById('receiptContent');
+            receiptElement.style.display = 'block'; // Temporarily display for html2canvas
+
+            try {
+                // Use html2canvas to capture the receipt div as an image
+                const canvas = await html2canvas(receiptElement, {
+                    scale: 2, // Increase scale for better PDF quality
+                    useCORS: true, // Important if your logo is from an external URL
+                    logging: true // Enable logging for debugging html2canvas
+                });
+                const imgData = canvas.toDataURL('image/png');
+                const imgProps = doc.getImageProperties(imgData);
+                const pdfWidth = doc.internal.pageSize.getWidth() - 20; // Page width with margin
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                let positionY = 10; // Start with a margin from top
+
+                doc.addImage(imgData, 'PNG', 10, positionY, pdfWidth, pdfHeight); // Add image with margins
+                doc.save(`Recibo_Inscripcion_${(document.getElementById('receiptNombre').textContent || 'SILACORP').replace(/\s+/g, '_')}.pdf`);
+            } catch (error) {
+                console.error("Error generating PDF: ", error);
+                const errorDiv = document.createElement('div');
+                errorDiv.style.position = 'fixed';
+                errorDiv.style.top = '20px';
+                errorDiv.style.left = '50%';
+                errorDiv.style.transform = 'translateX(-50%)';
+                errorDiv.style.padding = '15px';
+                errorDiv.style.backgroundColor = '#f8d7da';
+                errorDiv.style.color = '#721c24';
+                errorDiv.style.border = '1px solid #f5c6cb';
+                errorDiv.style.borderRadius = '5px';
+                errorDiv.style.zIndex = '2000';
+                errorDiv.innerHTML = 'Error al generar el PDF. Revise la consola para más detalles. <button onclick="this.parentElement.remove()" style="margin-left: 15px; padding: 5px 10px; cursor:pointer;">OK</button>';
+                document.body.appendChild(errorDiv);
+            } finally {
+                receiptElement.style.display = 'none'; // Hide the receipt content again
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth' // Smooth scroll effect
+                    });
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
